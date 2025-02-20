@@ -2,6 +2,10 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { useState } from "react";
+import { Input } from "./components/Input";
+import { Button } from "./components/Button";
+import { Card, CardHeader, CardTitle, CardContent } from "./components/Card";
+import { Users } from "lucide-react";
 
 export default function Home() {
   const [names, setNames] = useState<string[]>(Array(10).fill(""));
@@ -27,53 +31,111 @@ export default function Home() {
     setTeam1(shuffledNames.slice(0, 5));
     setTeam2(shuffledNames.slice(5, 10));
   };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header />
-      <main className="min-h-screen flex flex-col items-center justify-center p-4">
-        {/* <h1 className="text-2xl font-bold mb-4">5v5 Random Team Generator</h1> */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
-          {names.map((name, index) => (
-            <input
-              key={index}
-              type="text"
-              value={name}
-              onChange={(e) => handleChange(index, e.target.value)}
-              placeholder={`Player ${index + 1}`}
-              className="p-2 rounded bg-tertiary text-white placeholder-gray-300 text-center"
-            />
-          ))}
-        </div>
-        {error && <p className="text-red-400">{error}</p>}
-        <button
-          onClick={generateTeams}
-          className="mt-4 p-3 bg-white text-black rounded-lg hover:scale-105 transition-all"
-        >
-          Generate Teams
-        </button>
-        {team1.length > 0 && (
-          <div className="mt-6 w-full max-w-md">
-            <h2 className="text-xl font-bold">Teams</h2>
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="bg-black p-4 rounded-lg">
-                <h3 className="text-lg font-bold text-blue-400">Team 1</h3>
-                <ul>
-                  {team1.map((player, index) => (
-                    <li key={index} className="mt-1">{player}</li>
-                  ))}
-                </ul>
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <Card className="max-w-3xl mx-auto">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 font-heading text-3xl">
+              <Users className="w-6 h-6" />
+              5v5 Team Generator
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-4">
+                <h3 className="text-lg font-special font-semibold">Team 1 Players</h3>
+                {names.slice(0, 5).map((name, index) => (
+                  <div key={index} className="relative">
+                    <Input
+                      value={name}
+                      onChange={(e) => handleChange(index, e.target.value)}
+                      placeholder={`Player ${index + 1}`}
+                      className="pl-8"
+                    />
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      {index + 1}
+                    </span>
+                  </div>
+                ))}
               </div>
-              <div className="bg-black p-4 rounded-lg">
-                <h3 className="text-lg font-bold text-red-400">Team 2</h3>
-                <ul>
-                  {team2.map((player, index) => (
-                    <li key={index} className="mt-1">{player}</li>
-                  ))}
-                </ul>
+              <div className="space-y-4">
+                <h3 className="text-lg font-special font-semibold">Team 2 Players</h3>
+                {names.slice(5, 10).map((name, index) => (
+                  <div key={index + 5} className="relative">
+                    <Input
+                      value={name}
+                      onChange={(e) => handleChange(index + 5, e.target.value)}
+                      placeholder={`Player ${index + 6}`}
+                      className="pl-8"
+                    />
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                      {index + 6}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        )}
+
+            {error && (
+              <p className="text-destructive mt-4 text-center font-special">{error}</p>
+            )}
+
+            <Button
+              onClick={generateTeams}
+              className="w-full mt-6"
+              size="lg"
+            >
+              Generate Teams
+            </Button>
+
+            {team1.length > 0 && (
+              <div className="mt-8 grid md:grid-cols-2 gap-4">
+                <Card className="bg-primary/10 border-primary/20 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="font-heading text-xl text-primary">
+                      Team Blue
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 font-special">
+                      {team1.map((player, index) => (
+                        <li key={index} className="flex items-center gap-2 text-foreground">
+                          <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-sm font-medium text-primary">
+                            {index + 1}
+                          </span>
+                          {player}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-destructive/10 border-destructive/20 shadow-lg">
+                  <CardHeader>
+                    <CardTitle className="font-heading text-xl text-destructive">
+                      Team Red
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2 font-special">
+                      {team2.map((player, index) => (
+                        <li key={index} className="flex items-center gap-2 text-foreground">
+                          <span className="w-6 h-6 rounded-full bg-destructive/20 flex items-center justify-center text-sm font-medium text-destructive">
+                            {index + 1}
+                          </span>
+                          {player}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
       <Footer />
     </div>

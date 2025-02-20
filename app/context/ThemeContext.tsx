@@ -23,8 +23,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }
 
     setTheme(savedTheme);
-    document.documentElement.classList.remove("dark", "light");
-    document.documentElement.classList.add(savedTheme);
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
     setMounted(true);
   }, []);
 
@@ -32,7 +31,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
-    document.documentElement.classList.replace(theme, newTheme);
+    document.documentElement.classList.toggle("dark");
   };
 
   // Prevent flashing issue
